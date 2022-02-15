@@ -2,12 +2,23 @@ import supertest from "supertest";
 
 import app from "../server.js";
 
+const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
 describe("POST /converter/<targetCurrency>", () => {
+  afterEach(() => warn.mockReset());
+
   it("should convert GBP > USD", async () => {
     const res = await supertest(app).post("/USD").send({ GBP: 100 });
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ USD: 127.28 });
+  });
+
+  it("should convert USD > GBP", async () => {
+    const res = await supertest(app).post("/GBP").send({ USD: 100 });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ GBP: 78.57 });
   });
 
   it("should convert EUR > GBP", async () => {
@@ -17,7 +28,7 @@ describe("POST /converter/<targetCurrency>", () => {
     expect(res.body).toEqual({ GBP: 89.47 });
   });
 
-  it("should convert and sum multiple currencies in a request", async () => {
+  it("should convert and sum multiple currencies in a single request", async () => {
     const res = await supertest(app)
       .post("/CAD")
       .send({ EUR: 13.12, GBP: 99 })
@@ -25,5 +36,56 @@ describe("POST /converter/<targetCurrency>", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ CAD: 185.64 });
+  });
+
+  it("should handle lowercase currency code url params", async () => {
+    const res = await supertest(app).post("/usd").send({ GBP: 100 });
+
+    expect(res.status).toBe(200);
+  });
+
+  it("should handle lowercase currency codes in the request payload", async () => {
+    const res = await supertest(app).post("/USD").send({ gbp: 100 });
+
+    expect(res.status).toBe(200);
+  });
+
+  it("should accept both numeric and string source value", async () => {
+    const res = await supertest(app).post("/USD").send({ GBP: "100" });
+
+    expect(res.status).toBe(200);
+  });
+
+  it("should return an error if no source currency data is provided", async () => {
+    const res = await supertest(app)
+      .post("/CAD")
+      .send()
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(402);
+    expect(res.body).toEqual({ message: "No data in request" });
+    expect(warn).toBeCalledWith("No data in request");
+  });
+
+  it("should return an error if the target currency is not available", async () => {
+    const res = await supertest(app)
+      .post("/THB")
+      .send({ GBP: 100 })
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(400);
+    expect(res.body).toEqual({ message: "Currency THB not found" });
+    expect(warn).toBeCalledWith("Currency THB not found");
+  });
+
+  it("should return an error if any of the source currencies are not available", async () => {
+    const res = await supertest(app)
+      .post("/USD")
+      .send({ GBP: 100, THB: 100 })
+      .set("Accept", "application/json");
+
+    expect(res.status).toBe(400);
+    expect(res.body).toEqual({ message: "Currency THB not found" });
+    expect(warn).toBeCalledWith("Currency THB not found" );
   });
 });
