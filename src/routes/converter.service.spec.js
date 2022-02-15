@@ -1,3 +1,7 @@
+import { convertCurrency } from './converter.service.js'
+
 describe('convertCurrency', () => {
-  it.todo('should convert a value based on current and target rates')
+  it('should convert a value based on provided current and target rates against the dollar', () => {
+    expect(convertCurrency(100,1,1.5)).toBe(150)
+  })
 });

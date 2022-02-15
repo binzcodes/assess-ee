@@ -10,10 +10,11 @@
   "engineStrict": true,
   "scripts": {
     "dev": "nodemon -w src --exec \"babel-node src\"",
-    "build": "babel src -s -D -d dist",
+    "build": "babel src -s -D -d dist --ignore **/*.spec.js",
     "start": "node dist",
     "prestart": "npm run -s build",
-    "test": "jest --no-cache",
+    "test": "jest --no-cache --verbose ./src",
+    "test:coverage": "jest --coverage ./src",
     "lint": "npx prettier --write ."
   },
   "jest": {
