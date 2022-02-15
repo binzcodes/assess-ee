@@ -9,4 +9,11 @@ describe("POST /converter/<targetCurrency>", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ USD: 127.28 });
   });
+
+  it("should convert EUR > GBP", async () => {
+    const res = await supertest(app).post("/GBP").send({ EUR: 100 });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ GBP: 89.47 });
+  });
 });
