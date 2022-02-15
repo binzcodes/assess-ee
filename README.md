@@ -23,3 +23,5 @@ As the algo was fairly straightforward I was able to implement a generic solutio
 I worked test-first on the endpoints but did not leave myself enough time to go back and implement unit-tests on the conversion services and mock the functions in controller once I had broken them out into their own functions. However as the endpoint tests are end-to-end coverage is complete (`npm run test:coverage`).
 
 Given more time I would only implement mocks and add unit tests as I am happy the API is robust and feature complete as far as the brief. I would consider encapsulating the error handling within the service functions, but the current approach offers more descriptive errors with less overhead which is more in line with the requirements for simplicity.
+
+> version: 5b8d0fd276b6d288905ed2f63a934e057e8feca2
