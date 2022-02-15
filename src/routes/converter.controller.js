@@ -22,11 +22,13 @@ export const getRate = currency => exchangeRates[currency.toUpperCase()];
 export const currencyConverter = (req, res) => {
   const { params, body } = req;
   const currency = params.currency.toUpperCase();
-  const [[sourceCurrency, value]] = Object.entries(body);
-  const result = convertCurrency(
-    value,
-    getRate(sourceCurrency),
-    getRate(currency)
+  const sources = Object.entries(body);
+  const result = sources.reduce((acc, [sourceCurrency, value]) => 
+      acc + convertCurrency(
+      value,
+      getRate(sourceCurrency),
+      getRate(currency)
+    ), 0
   );
   const roundedResult = Math.round(result * 100) / 100
   res.json({ [currency]: roundedResult });
