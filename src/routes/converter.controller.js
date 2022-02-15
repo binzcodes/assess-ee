@@ -1,5 +1,5 @@
-import { exchangeRates } from "../data/data";
-import { convertCurrencies } from "./converter.service";
+import { exchangeRates } from "../data/data.js";
+import { convertCurrencies } from "./converter.service.js";
 
 const validateCurrency = (currency) => !!exchangeRates[currency.toUpperCase()]
 

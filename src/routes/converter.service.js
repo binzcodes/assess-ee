@@ -1,4 +1,4 @@
-import { exchangeRates } from "../data/data";
+import { exchangeRates } from "../data/data.js";
 
 export const convertCurrency = (value, sourceRate, targetRate) =>
   (value * 100000) / ((sourceRate * 100000) / (targetRate * 100000)) / 100000;
