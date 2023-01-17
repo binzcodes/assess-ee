@@ -68,7 +68,7 @@
     }
   },
   "dependencies": {
-    "axios": "^0.26.1",
+    "axios": "^1.2.2",
     "express": "^4.13.3",
     "express-async-handler": "^1.2.0",
     "msw": "^0.49.2"
