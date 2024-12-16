@@ -71,7 +71,7 @@
     "axios": "^1.2.5",
     "express": "^4.13.3",
     "express-async-handler": "^1.2.0",
-    "msw": "^1.0.0"
+    "msw": "^2.6.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
